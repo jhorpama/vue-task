@@ -22,6 +22,16 @@ export default new Router({
       path: '/task',
       name: 'task',
       component: () => import('../components/Task.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Register.vue')
     }
   ]
 })

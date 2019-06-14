@@ -3,8 +3,8 @@
         <b-container>
             <b-row>
                 <b-col md="6">
-                     <h2 class="text-center">ADD TASK</h2>
-                     <b-card>
+                     <h2 class="text-center" style="color: #fff;">ADD TASK</h2>
+                     <b-card class="mt-4">
                          <b-form-input
                          type="text"
                          placeholder="Enter the name of the task"
@@ -20,24 +20,60 @@
                          <b-button v-if="estado" @click="updateTask" class="btn-block mt-3" variant="outline-success">Update Task</b-button>
                          <b-button v-else class="btn-block mt-3" variant="outline-success" @click="addTask">Add Task</b-button>
                      </b-card>
+                     <pre>{{$data}}</pre>
                 </b-col>
                 <b-col md="6">
-                     <h2 class="text-center">My TASK</h2>
-                     <ul v-for="task in mytask" :key="task._id">
-                         <b-card-group>
-                                <b-card>
-                                    <li>{{task._id}}</li>
-                                    <li>{{task.name}}</li>
-                                    <li>{{task.description}}</li>
-                                    <li>{{task.create_at}}</li>
-                                    <p>{{nombre}}</p>
+                    <h2 class="text-center" style="color: #fff;">My TASKS</h2>
+                                <!--Tasks-->
+                                <b-card v-for="task in mytask" :key="task._id" class="mt-4">
+                                    <h2 class="text-center"><Octicon :icon="Octicons.trashcan" :scale="2"/></h2>
+                                    <b-list-group>
+                                         <b-list-group-item variant="primary"><h2 style="font-size: 18px; color: #000; text-align: center;">{{task.name}}</h2></b-list-group-item>
+                                         <b-list-group-item variant="info"><h2 style="font-size: 16px; color: #000">{{task.description}}</h2></b-list-group-item>
+                                         <b-list-group-item variant="warning"><h2 style="font-size: 14px; color: #000">{{task.create_at}}</h2></b-list-group-item>
+                                    </b-list-group>
+
+                                    <!--Subtasks-->
+                                    <ul v-for="mysubtask in subtasks" :key="mysubtask._id">
+                                        <b-list-group  class="mt-1" v-if="task._id === mysubtask.mytask">
+                                            <b-list-group-item variant="danger"><h2 style="font-size: 14px; color: #000">{{mysubtask.name}}</h2></b-list-group-item>
+                                            <b-list-group-item><h2 style="font-size: 14px; color: #000">{{mysubtask.description}}</h2></b-list-group-item>
+                                            <h2>{{mysubtask._id}}</h2>
+                                            <b-list-group-item variant="success">
+                                                <b-row>
+                                                    <b-col>
+                                                        <h2 @click="deleteSubTask(mysubtask._id)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.x" :scale="1"/></h2>
+                                                    </b-col>
+                                                    <b-col>
+                                                        <h2 class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.pencil" :scale="1"/></h2>
+                                                    </b-col>
+                                                </b-row>
+                                            </b-list-group-item>
+                                        </b-list-group>
+                                    </ul>
+                                    <!--End Subtasks-->
+                                    <b-card class="mt-2">
+                                        <b-form-input
+                                        type="text"
+                                        placeholder="Enter the name of the SubTask"
+                                        v-model="subtaskname"
+                                        ></b-form-input>
+                                        <b-form-textarea
+                                        class="mt-4"
+                                        placeholder="Enter the description of the SubTask"
+                                        v-model="subtaskdescription"
+                                        rows="3"
+                                        max-rows="3"
+                                        ></b-form-textarea>
+                                        <b-button v-if="estado" @click="updateTask" class="btn-block mt-3" variant="outline-success">Update SubTask</b-button>
+                                        <h2 @click="setSubtask(task._id)" class="text-center mt-1" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.plus" :scale="2"/></h2>
+                                    </b-card>
                                     <b-card-body>
                                         <b-button class="m-3" @click="loadTask(task._id, task.name, task.description)" variant="outline-primary">Update</b-button>
                                         <b-button @click="deleteTask(task._id)" variant="outline-danger">Delete</b-button>
                                     </b-card-body>
                                 </b-card>
-                         </b-card-group>
-                     </ul>
+                            <!--End Tasks-->
                 </b-col>
             </b-row>
         </b-container>
@@ -46,29 +82,33 @@
 <script>
      import { mapState, mapActions } from 'vuex'
      const axios = require('axios');
+     const { Octicon, Octicons } = require('octicons-vue')
      export default{
          name: 'Task',
          components: {
+             Octicon
          },
          data() {
              return {
                  name: null,
-                 nombre: null,
                  description: null,
                  id: null,
                  estado: false,
-                 mysubtask: null,
+                 subtaskname: null,
+                 subtaskdescription: null,
+                 Octicons
              }
          },
          computed: {
              ...mapState([
-                 'mytask'
+                 'mytask',
+                 'subtasks'
              ])
          },
          methods: {
              ...mapActions([
                  'obtainTask',
-                 'addTask'
+                 'getSubtasks'
              ]),
              addTask() {
                 axios.post('http://localhost:3000/api/task/add',{
@@ -94,12 +134,18 @@
                            });
 
                     this.mytask.splice(index, 1);
+                    console.log(index);
              },
-             deleteTask(id){
+             async deleteTask(id){
                  console.log(id);
-                 axios.delete(`http://localhost:3000/api/task/delete/${id}`)
+                 await axios.delete(`http://localhost:3000/api/task/delete/${id}`)
                       .then(res => {
-                           this.removeItem(res.data._id);
+                           //this.removeItem(res.data._id);
+                            this.mytask.findIndex((valor, index) => {
+                                    if(valor._id == res.data._id){
+                                    this.mytask.splice(index, 1);
+                                    }
+                            });
                       })
                       .catch(err => {
                           console.error(err);
@@ -127,19 +173,39 @@
                       console.error(err);
                   })
              },
-             subtask(id){
-                 axios.get('http://localhost:3000/api/subtask/')
-                  .then(res => {
-                      console.log(res.data);
-                      this.mysubtask = res.data.filter(subtask => subtask.task_id === id);
-                  }).catch(err => {
-                      console.error(err);
-                  });
+             deleteSubTask(id){
+               axios.delete(`http://localhost:3000/api/subtask/delete/${id}`)
+                            .then(res => {
+                                console.info(res.data._id);
+                                this.subtasks.findIndex((valor, index) => {
+                                    if(valor._id == res.data._id){
+                                    this.subtasks.splice(index, 1);
+                                    }
+                                });
+                            }).catch(err => {
+                                console.error(err);
+                            })
+             },
+             setSubtask(id){
+                axios.post('http://localhost:3000/api/subtask/add', {
+                   name: this.subtaskname,
+                   description: this.subtaskdescription,
+                   mytask: id
+                }).then(res => {
+                    this.subtasks.push(res.data);
+                    this.subtaskname = null
+                    this.subtaskdescription = null
+                }).catch(err => {
+                    console.error(err);
+                })
              }
-
+         },
+         updated() {
+           //console.log('update');
          },
          mounted() {
              this.obtainTask();
+             this.getSubtasks();
          }
 
      }
