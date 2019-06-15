@@ -63,7 +63,7 @@
                }).then(res => {
                    if(res.data.token !== undefined){
                       localStorage.setItem('key', res.data.token);
-                      this.$router.push({ name: 'home' });
+                      this.$router.push({ name: 'task', params: { email: this.email } });
                    }else if(res.data.message){
                       this.message = res.data.message;
                    }

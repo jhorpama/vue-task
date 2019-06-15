@@ -1,8 +1,10 @@
 <template>
     <div>
+        <Cabecera></Cabecera>
         <b-container>
             <b-row>
                 <b-col md="6">
+                     <h2>{{email}}</h2>
                      <h2 class="text-center" style="color: #fff;">ADD TASK</h2>
                      <b-card class="mt-4">
                          <b-form-input
@@ -83,10 +85,12 @@
      import { mapState, mapActions } from 'vuex'
      const axios = require('axios');
      const { Octicon, Octicons } = require('octicons-vue')
+     import Cabecera from '../components/Cabecera'
      export default{
          name: 'Task',
          components: {
-             Octicon
+             Octicon,
+             Cabecera
          },
          data() {
              return {
@@ -99,6 +103,8 @@
                  Octicons
              }
          },
+         props: ['email']
+         ,
          computed: {
              ...mapState([
                  'mytask',
@@ -113,7 +119,8 @@
              addTask() {
                 axios.post('http://localhost:3000/api/task/add',{
                     name: this.name,
-                    description: this.description
+                    description: this.description,
+                    email: this.email
                 })
                     .then(res => {
                             this.mytask.unshift(res.data);
@@ -211,4 +218,8 @@
      }
 </script>
 <style>
+body{
+    background: #2c3e50;
+    font-family: 'open sans';
+}
 </style>
