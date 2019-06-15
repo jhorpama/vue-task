@@ -4,7 +4,6 @@
         <b-container>
             <b-row>
                 <b-col md="6">
-                     <h2>{{email}}</h2>
                      <h2 class="text-center" style="color: #fff;">ADD TASK</h2>
                      <b-card class="mt-4">
                          <b-form-input
@@ -211,8 +210,9 @@
            //console.log('update');
          },
          mounted() {
-             this.obtainTask();
+             this.obtainTask({email: this.email});
              this.getSubtasks();
+             this.email;
          }
 
      }

@@ -21,8 +21,10 @@ export default new Vuex.Store({
       }
   },
   actions: {
-      obtainTask({commit}) {
-         axios.get('http://localhost:3000/api/tasks')
+      obtainTask({commit}, email) {
+         const userEmail = email.email
+         console.log('este es :'+ userEmail);
+         axios.get(`http://localhost:3000/api/tasks/${userEmail}`)
               .then(res => {
                  commit('loadTask', res.data);
               })
