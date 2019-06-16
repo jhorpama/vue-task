@@ -8,11 +8,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/About.vue')
-    },
-    {
       path: '/task',
       name: 'task',
       props: true,

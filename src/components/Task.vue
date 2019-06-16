@@ -21,10 +21,10 @@
                          <b-button v-if="estado" @click="updateTask" class="btn-block mt-3" variant="outline-success">Update Task</b-button>
                          <b-button v-else class="btn-block mt-3" variant="outline-success" @click="addTask">Add Task</b-button>
                      </b-card>
-                     <pre>{{$data}}</pre>
+                    <!-- <pre>{{$data}}</pre>-->
                 </b-col>
                 <b-col md="6">
-                    <h2 class="text-center" style="color: #fff;">My TASKS</h2>
+                    <h2 class="text-center mt-4" style="color: #fff;">My TASKS</h2>
                                 <!--Tasks-->
                                 <b-card v-for="task in mytask" :key="task._id" class="mt-4">
                                     <h2 class="text-center"><Octicon :icon="Octicons.trashcan" :scale="2"/></h2>
@@ -46,7 +46,7 @@
                                                         <h2 @click="deleteSubTask(mysubtask._id)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.x" :scale="1"/></h2>
                                                     </b-col>
                                                     <b-col>
-                                                        <h2 class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.pencil" :scale="1"/></h2>
+                                                        <h2 @click="obtainSubtask(mysubtask._id, mysubtask.name, mysubtask.description)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.pencil" :scale="1"/></h2>
                                                     </b-col>
                                                 </b-row>
                                             </b-list-group-item>
@@ -66,8 +66,8 @@
                                         rows="3"
                                         max-rows="3"
                                         ></b-form-textarea>
-                                        <b-button v-if="estado" @click="updateTask" class="btn-block mt-3" variant="outline-success">Update SubTask</b-button>
-                                        <h2 @click="setSubtask(task._id)" class="text-center mt-1" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.plus" :scale="2"/></h2>
+                                        <b-button v-if="subtaskstate" @click="editedSubtask" class="btn-block mt-3" variant="outline-success">Update SubTask</b-button>
+                                        <h2 v-else @click="setSubtask(task._id)" class="text-center mt-1" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.plus" :scale="2"/></h2>
                                     </b-card>
                                     <b-card-body>
                                         <b-button class="m-3" @click="loadTask(task._id, task.name, task.description)" variant="outline-primary">Update</b-button>
@@ -96,9 +96,11 @@
                  name: null,
                  description: null,
                  id: null,
+                 idsubtask: null,
                  estado: false,
                  subtaskname: null,
                  subtaskdescription: null,
+                 subtaskstate: false,
                  Octicons
              }
          },
@@ -201,6 +203,32 @@
                     this.subtasks.push(res.data);
                     this.subtaskname = null
                     this.subtaskdescription = null
+                }).catch(err => {
+                    console.error(err);
+                })
+             },
+             obtainSubtask(id,name,description){
+                console.log(id,name,description);
+                this.idsubtask = id
+                this.subtaskname = name
+                this.subtaskdescription = description
+                this.subtaskstate = true
+             },
+             editedSubtask(){
+                axios.put(`http://localhost:3000/api/subtask/update/${this.idsubtask}`,{
+                    name: this.subtaskname,
+                    description: this.subtaskdescription
+                }).then(res => {
+                    this.subtasks.findIndex((valor, index) => {
+                        if(valor._id == res.data._id){
+                            this.subtasks.splice(index, 1);
+                        }
+                    });
+                    this.subtasks.push(res.data);
+                    this.idsubtask = null
+                    this.subtaskname = null
+                    this.subtaskdescription = null
+                    this.subtaskstate = false
                 }).catch(err => {
                     console.error(err);
                 })

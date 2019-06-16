@@ -2,7 +2,6 @@
     <div>
         <div id="nav">
           <router-link to="/task">Tasks</router-link> |
-          <router-link to="/about">About</router-link> |
           <a @click="goOut">Sign out</a>
         </div>
     </div>
@@ -28,6 +27,7 @@
   font-weight: bold;
   color: #ffffff;
   cursor: pointer;
+  font-size: 24px;
 }
 
 #nav a.router-link-exact-active {
