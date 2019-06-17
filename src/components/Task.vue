@@ -31,7 +31,7 @@
                                     <b-list-group>
                                          <b-list-group-item variant="primary"><h2 style="font-size: 18px; color: #000; text-align: center;">{{task.name}}</h2></b-list-group-item>
                                          <b-list-group-item variant="info"><h2 style="font-size: 16px; color: #000">{{task.description}}</h2></b-list-group-item>
-                                         <b-list-group-item variant="warning"><h2 style="font-size: 14px; color: #000">{{task.create_at}}</h2></b-list-group-item>
+                                         <b-list-group-item variant="warning"><h2 style="font-size: 14px; color: #000" v-text="formatDate(task.create_at)"></h2></b-list-group-item>
                                     </b-list-group>
 
                                     <!--Subtasks-->
@@ -85,6 +85,7 @@
      const axios = require('axios');
      const { Octicon, Octicons } = require('octicons-vue')
      import Cabecera from '../components/Cabecera'
+     import { format } from 'timeago.js'
      export default{
          name: 'Task',
          components: {
@@ -101,6 +102,7 @@
                  subtaskname: null,
                  subtaskdescription: null,
                  subtaskstate: false,
+                 format_create_at: null,
                  Octicons
              }
          },
@@ -232,6 +234,9 @@
                 }).catch(err => {
                     console.error(err);
                 })
+             },
+            formatDate(create){
+                return format(create);
              }
          },
          updated() {
@@ -241,6 +246,7 @@
              this.obtainTask({email: this.email});
              this.getSubtasks();
              this.email;
+             this.formatDate();
          }
 
      }
