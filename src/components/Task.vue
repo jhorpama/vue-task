@@ -38,17 +38,19 @@
                                     <ul v-for="mysubtask in subtasks" :key="mysubtask._id">
                                         <b-list-group  class="mt-1" v-if="task._id === mysubtask.mytask">
                                             <b-list-group-item variant="danger"><h2 style="font-size: 14px; color: #000">{{mysubtask.name}}</h2></b-list-group-item>
-                                            <b-list-group-item><h2 style="font-size: 14px; color: #000">{{mysubtask.description}}</h2></b-list-group-item>
-                                            <h2>{{mysubtask._id}}</h2>
+                                            <b-list-group-item><h2 style="font-size: 14px; color: #000" :class="{line: mysubtask.state}">{{mysubtask.description}}</h2></b-list-group-item>
                                             <b-list-group-item variant="success">
-                                                <b-row>
-                                                    <b-col>
-                                                        <h2 @click="deleteSubTask(mysubtask._id)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.x" :scale="1"/></h2>
-                                                    </b-col>
-                                                    <b-col>
-                                                        <h2 @click="obtainSubtask(mysubtask._id, mysubtask.name, mysubtask.description)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.pencil" :scale="1"/></h2>
-                                                    </b-col>
-                                                </b-row>
+                                                <b-container>
+                                                    <b-row>
+                                                        <b-col>
+                                                            <h2 @click="deleteSubTask(mysubtask._id)" class="text-center" style="color: #000; font-size: 10px;"><Octicon :icon="Octicons.x" :scale="1"/></h2>
+                                                        </b-col>
+                                                        <b-col>
+                                                            <h2 @click="obtainSubtask(mysubtask._id, mysubtask.name, mysubtask.description)" style="color: #000; display: inline"><Octicon :icon="Octicons.pencil" :scale="1"/></h2>
+                                                            <h2 @click="readySubtask(mysubtask._id)" style="color: #000; display: inline; margin-left: 20px;"><Octicon :icon="Octicons.checklist" :scale="1"/></h2>
+                                                        </b-col>
+                                                    </b-row>
+                                                </b-container>
                                             </b-list-group-item>
                                         </b-list-group>
                                     </ul>
@@ -103,6 +105,7 @@
                  subtaskdescription: null,
                  subtaskstate: false,
                  format_create_at: null,
+                 ready: true,
                  Octicons
              }
          },
@@ -183,7 +186,9 @@
                       console.error(err);
                   })
              },
-             deleteSubTask(id){
+             async deleteSubTask(id){
+                 console.log(id);
+                 console.log('entro');
                axios.delete(`http://localhost:3000/api/subtask/delete/${id}`)
                             .then(res => {
                                 console.info(res.data._id);
@@ -237,7 +242,21 @@
              },
             formatDate(create){
                 return format(create);
-             }
+            },
+            readySubtask(id){
+               axios.put(`http://localhost:3000/api/subtask/update/${id}`,{
+                    state: true
+                }).then(res => {
+                    this.subtasks.findIndex((valor, index) => {
+                        if(valor._id == res.data._id){
+                            this.subtasks.splice(index, 1);
+                        }
+                    });
+                    this.subtasks.unshift(res.data);
+                }).catch(err => {
+                    console.error(err);
+                })
+            }
          },
          updated() {
            //console.log('update');
@@ -256,4 +275,9 @@ body{
     background: #2c3e50;
     font-family: 'open sans';
 }
+
+.line{
+    text-decoration: line-through;
+}
+
 </style>
