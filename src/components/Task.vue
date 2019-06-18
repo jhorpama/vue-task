@@ -124,7 +124,7 @@
                  'getSubtasks'
              ]),
              addTask() {
-                axios.post('http://localhost:3000/api/task/add',{
+                axios.post('https://api-week-tasks.herokuapp.com/api/task/add',{
                     name: this.name,
                     description: this.description,
                     email: this.email
@@ -161,7 +161,7 @@
                 dangerMode: true,
                 }).then(res => {
                     //Delete task
-                    axios.delete(`http://localhost:3000/api/task/delete/${id}`)
+                    axios.delete(`https://api-week-tasks.herokuapp.com/api/task/delete/${id}`)
                         .then(res => {
                             //this.removeItem(res.data._id);
                                 this.mytask.findIndex((valor, index) => {
@@ -188,7 +188,7 @@
                   this.estado = true
              },
              updateTask(){
-                  axios.put(`http://localhost:3000/api/task/update/${this.id}`, {
+                  axios.put(`https://api-week-tasks.herokuapp.com/api/task/update/${this.id}`, {
                       name: this.name,
                       description: this.description
                   }).then(res => {
@@ -205,7 +205,7 @@
              async deleteSubTask(id){
                  console.log(id);
                  console.log('entro');
-               axios.delete(`http://localhost:3000/api/subtask/delete/${id}`)
+               axios.delete(`https://api-week-tasks.herokuapp.com/api/subtask/delete/${id}`)
                             .then(res => {
                                 console.info(res.data._id);
                                 this.subtasks.findIndex((valor, index) => {
@@ -218,7 +218,7 @@
                             })
              },
              setSubtask(id){
-                axios.post('http://localhost:3000/api/subtask/add', {
+                axios.post('https://api-week-tasks.herokuapp.com/api/subtask/add', {
                    name: this.subtaskname,
                    description: this.subtaskdescription,
                    mytask: id
@@ -238,7 +238,7 @@
                 this.subtaskstate = true
              },
              editedSubtask(){
-                axios.put(`http://localhost:3000/api/subtask/update/${this.idsubtask}`,{
+                axios.put(`https://api-week-tasks.herokuapp.com/api/subtask/update/${this.idsubtask}`,{
                     name: this.subtaskname,
                     description: this.subtaskdescription
                 }).then(res => {
@@ -260,7 +260,7 @@
                 return format(create);
             },
             readySubtask(id){
-               axios.put(`http://localhost:3000/api/subtask/update/${id}`,{
+               axios.put(`https://api-week-tasks.herokuapp.com/api/subtask/update/${id}`,{
                     state: true
                 }).then(res => {
                     this.subtasks.findIndex((valor, index) => {
@@ -273,36 +273,6 @@
                     console.error(err);
                 })
             },
-            alertMessage(){
-               /* const willDelete = await swal({
-                buttons: [true, "Deleted Task!"],
-                title: "Are you sure?",
-                text: "Are you sure that you want to delete this task?",
-                icon: "warning",
-                dangerMode: true,
-                });
-                console.log(willDelete);
-                if (willDelete) {
-                swal("Deleted!", "Your task has been deleted!", "success");
-                }
-
-                //SweetAlert
-                swal({
-                buttons: [true, "Deleted Task!"],
-                title: "Are you sure?",
-                text: "Are you sure that you want to delete this task?",
-                icon: "warning",
-                dangerMode: true,
-                }).then(res => {
-                    
-                    if (res) {
-                      swal("Deleted!", "Your task has been deleted!", "success");
-                    }
-                }).catch(err => {
-                    console.error(err);
-                });
-                */
-            }
          },
          updated() {
            //console.log('update');

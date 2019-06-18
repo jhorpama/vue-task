@@ -1,5 +1,5 @@
 <template>
-     <div>
+     <div class="body">
         <Cabecera></Cabecera>
         <b-container>
             <b-row>
@@ -62,7 +62,7 @@
       },
       methods: {
           setdata(){
-              axios.post('http://localhost:3000/api/register/', {
+              axios.post('https://api-week-tasks.herokuapp.com/api/register/', {
                   email: this.email,
                   password: this.password,
                   name: this.username
@@ -78,9 +78,9 @@
       },
   }
 </script>
-<style>
+<style scoped>
 
-body{
+.body{
     background: #34495e;
     font-family: 'open sans';
 }

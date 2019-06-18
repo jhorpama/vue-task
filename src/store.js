@@ -24,14 +24,14 @@ export default new Vuex.Store({
       obtainTask({commit}, email) {
          const userEmail = email.email
          console.log('este es :'+ userEmail);
-         axios.get(`http://localhost:3000/api/tasks/${userEmail}`)
+         axios.get(`https://api-week-tasks.herokuapp.com/api/tasks/${userEmail}`)
               .then(res => {
                  commit('loadTask', res.data);
               })
               .catch(err => console.error(err));
       },
       getSubtasks({commit}) {
-          axios.get('http://localhost:3000/api/subtasks/')
+          axios.get('https://api-week-tasks.herokuapp.com/api/subtasks/')
                .then(res => {
                   commit('loadSubtask', res.data);
                }).catch(err => {

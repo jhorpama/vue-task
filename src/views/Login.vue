@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="body">
         <Cabecera></Cabecera>
         <b-container>
              <b-row>
@@ -57,7 +57,7 @@
        },
        methods: {
            getToken(){
-               axios.post('http://localhost:3000/api/login', {
+               axios.post('https://api-week-tasks.herokuapp.com/api/login', {
                   email: this.email,
                   password: this.password
                }).then(res => {
@@ -76,8 +76,8 @@
        },
    }
 </script>
-<style>
-body{
+<style scoped>
+.body{
     background: #2c3e50;
     font-family: 'open sans';
 }
