@@ -5,9 +5,9 @@
             <b-row>
                 <b-col>
                    <section class="mt-5">
-                       <h2 class="titulo">Lorem ipsum dolor sit.</h2>
-                       <p class="parrafo">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio amet odit ex ipsa magni nam tenetur sit eaque?</p>
-                       <p class="parrafo">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas hic laboriosam ab porro a, commodi ea corrupti, ad quam iure fugit cum veniam suscipit illum animi maxime neque deleniti quaerat!</p>
+                       <h2 class="titulo">Week, Tasks.</h2>
+                       <p class="parrafo">¿What are you waiting to take control of all your daily activities that none escape you thanks to week-tasks?</p>
+                       <p class="parrafo">week-tasks is a task manager that allows you to keep track of your day</p>
                    </section>
                 </b-col>
                 <b-col>

@@ -5,9 +5,9 @@
              <b-row>
                  <b-col>
                     <section class="mt-5">
-                        <h2 class="titulo">Lorem, ipsum.</h2>
-                        <p class="parrafo">Lorem ipsum dolor sit amet.</p>
-                        <p class="parrafo">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                        <h2 class="titulo">Week, Tasks.</h2>
+                        <p class="parrafo">What are you waiting for to fake control.</p>
+                        <p class="parrafo">Do not miss any pending work.</p>
                     </section>
                  </b-col>
                  <b-col>
@@ -34,7 +34,6 @@
                  </b-col>
              </b-row>
         </b-container>
-        <pre>{{$data}}</pre>
     </div>
 </template>
 <script>
@@ -83,13 +82,14 @@
 }
 
 .titulo{
-    color: #ffffff;
+    color: #27ae60;
     font-size: 85px;
     text-align: center;
 }
 
 .parrafo{
     color: #ffffff;
+    font-size: 24px;
     line-height: 24px;
     text-align: justify;
     font-weight: 300;
