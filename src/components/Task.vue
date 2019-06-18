@@ -83,12 +83,13 @@
     </div>
 </template>
 <script>
-     import { mapState, mapActions } from 'vuex'
-     const axios = require('axios');
-     const { Octicon, Octicons } = require('octicons-vue')
-     import Cabecera from '../components/Cabecera'
-     import { format } from 'timeago.js'
-     export default{
+    import { mapState, mapActions } from 'vuex'
+    const axios = require('axios');
+    const { Octicon, Octicons } = require('octicons-vue')
+    import Cabecera from '../components/Cabecera'
+    import { format } from 'timeago.js'
+    import swal from 'sweetalert';
+    export default{
          name: 'Task',
          components: {
              Octicon,
@@ -149,20 +150,35 @@
                     this.mytask.splice(index, 1);
                     console.log(index);
              },
-             async deleteTask(id){
-                 console.log(id);
-                 await axios.delete(`http://localhost:3000/api/task/delete/${id}`)
-                      .then(res => {
-                           //this.removeItem(res.data._id);
-                            this.mytask.findIndex((valor, index) => {
-                                    if(valor._id == res.data._id){
-                                    this.mytask.splice(index, 1);
-                                    }
-                            });
-                      })
-                      .catch(err => {
-                          console.error(err);
-                      })
+             deleteTask(id){
+                console.log(id);
+                //SweetAlert
+                swal({
+                buttons: [true, "Deleted Task!"],
+                title: "Are you sure?",
+                text: "Are you sure that you want to delete this task?",
+                icon: "warning",
+                dangerMode: true,
+                }).then(res => {
+                    //Delete task
+                    axios.delete(`http://localhost:3000/api/task/delete/${id}`)
+                        .then(res => {
+                            //this.removeItem(res.data._id);
+                                this.mytask.findIndex((valor, index) => {
+                                        if(valor._id == res.data._id){
+                                        this.mytask.splice(index, 1);
+                                        }
+                                });
+                        }).catch(err => {
+                            console.error(err);
+                        });
+                    //Delete task end
+                    if (res) {
+                      swal("Deleted!", "Your task has been deleted!", "success");
+                    }
+                }).catch(err => {
+                    console.error(err);
+                });
              },
              loadTask(id,name,description){
                   console.log(id,name,description);
@@ -256,16 +272,46 @@
                 }).catch(err => {
                     console.error(err);
                 })
+            },
+            alertMessage(){
+               /* const willDelete = await swal({
+                buttons: [true, "Deleted Task!"],
+                title: "Are you sure?",
+                text: "Are you sure that you want to delete this task?",
+                icon: "warning",
+                dangerMode: true,
+                });
+                console.log(willDelete);
+                if (willDelete) {
+                swal("Deleted!", "Your task has been deleted!", "success");
+                }
+
+                //SweetAlert
+                swal({
+                buttons: [true, "Deleted Task!"],
+                title: "Are you sure?",
+                text: "Are you sure that you want to delete this task?",
+                icon: "warning",
+                dangerMode: true,
+                }).then(res => {
+                    
+                    if (res) {
+                      swal("Deleted!", "Your task has been deleted!", "success");
+                    }
+                }).catch(err => {
+                    console.error(err);
+                });
+                */
             }
          },
          updated() {
            //console.log('update');
          },
          mounted() {
-             this.obtainTask({email: this.email});
-             this.getSubtasks();
-             this.email;
-             this.formatDate();
+            this.obtainTask({email: this.email});
+            this.getSubtasks();
+            this.email;
+            this.formatDate();
          }
 
      }
