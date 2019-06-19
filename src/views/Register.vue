@@ -62,7 +62,7 @@
       },
       methods: {
           setdata(){
-              axios.post('https://api-week-tasks.herokuapp.com/api/register/', {
+              axios.post('https://api-of-tasks.herokuapp.com/api/register/', {
                   email: this.email,
                   password: this.password,
                   name: this.username

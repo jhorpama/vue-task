@@ -56,7 +56,7 @@
        },
        methods: {
            getToken(){
-               axios.post('https://api-week-tasks.herokuapp.com/api/login', {
+               axios.post('https://api-of-tasks.herokuapp.com/api/login', {
                   email: this.email,
                   password: this.password
                }).then(res => {
