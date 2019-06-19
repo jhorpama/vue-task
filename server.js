@@ -9,7 +9,7 @@ const app = express();
 app.use(serverStatic(path.join(__dirname, 'dist')));
 
 // Setting
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 // Run server
 app.listen(port);
